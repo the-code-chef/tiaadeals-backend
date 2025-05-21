@@ -46,10 +46,10 @@ const getProductHandler = async (req, res) => {
  * */
 const searchProductsHandler = async (req, res) => {
   const { query } = req.query;
-  
+
   if (!query) {
     return res.status(400).json({ error: 'Search query is required' });
-  }
+    }
 
   try {
     const result = await pool.query(
@@ -58,7 +58,7 @@ const searchProductsHandler = async (req, res) => {
        LIMIT 10`,
       [`%${query}%`]
     );
-    
+
     return res.status(200).json({ products: result.rows });
   } catch (error) {
     return res.status(500).json({ error: error.message });

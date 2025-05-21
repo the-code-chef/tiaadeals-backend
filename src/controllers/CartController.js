@@ -36,7 +36,7 @@ const getCartItemsHandler = async (req, res) => {
     
     if (result.rows.length === 0) {
       return res.status(404).json({ errors: ['User not found'] });
-    }
+  }
 
     return res.status(200).json({ cart: result.rows[0].cart || [] });
   } catch (error) {
@@ -51,7 +51,7 @@ const getCartItemsHandler = async (req, res) => {
  * */
 const addItemToCartHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 
@@ -91,7 +91,7 @@ const addItemToCartHandler = async (req, res) => {
  * */
 const removeItemFromCartHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 
@@ -126,7 +126,7 @@ const removeItemFromCartHandler = async (req, res) => {
  * */
 const removeCartHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 
@@ -149,7 +149,7 @@ const removeCartHandler = async (req, res) => {
  * */
 const updateCartItemHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 

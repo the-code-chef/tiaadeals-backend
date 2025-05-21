@@ -34,8 +34,8 @@ if (!fs.existsSync('logs')) {
 
 // CORS configuration
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
@@ -97,7 +97,7 @@ app.use((err, req, res, next) => {
 });
 
 // Use port from environment variable or default to 8080
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 // Start server with error handling
 const server = app.listen(PORT, () => {

@@ -51,7 +51,7 @@ const getWishlistItemsHandler = async (req, res) => {
  * */
 const addItemToWishlistHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 
@@ -90,7 +90,7 @@ const addItemToWishlistHandler = async (req, res) => {
  * */
 const removeItemFromWishlistHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
   }
 
@@ -125,9 +125,9 @@ const removeItemFromWishlistHandler = async (req, res) => {
  * */
 const removeWishlistHandler = async (req, res) => {
   const userId = getUserIdFromToken(req);
-  if (!userId) {
+    if (!userId) {
     return res.status(401).json({ errors: ['Unauthorized access'] });
-  }
+    }
 
   try {
     await pool.query(
