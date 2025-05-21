@@ -26,4 +26,4 @@ router.options('/login', (req, res) => {
   res.status(204).end();
 });
 
-module.exports = router; 
+module.exports = router;

@@ -4,6 +4,11 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
 const authRoutes = require('./routes/authRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
+const productRoutes = require('./routes/productRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const { authenticateToken } = require('./middleware/auth');
 
 // Load environment variables
 dotenv.config();
@@ -11,7 +16,11 @@ dotenv.config();
 // Debug: Log environment variables
 console.log('Environment variables:', {
   PORT: process.env.PORT,
-  NODE_ENV: process.env.NODE_ENV
+  NODE_ENV: process.env.NODE_ENV,
+  DB_HOST: process.env.DB_HOST,
+  DB_PORT: process.env.DB_PORT,
+  DB_NAME: process.env.DB_NAME,
+  DB_USER: process.env.DB_USER
 });
 
 const app = express();
@@ -23,8 +32,16 @@ if (!fs.existsSync('logs')) {
   fs.mkdirSync('logs');
 }
 
+// CORS configuration
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
 // Basic middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan('combined', { stream: logger.stream }));
 
@@ -39,8 +56,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
 // Mount routes
 app.use('/api/auth', authRoutes);
+app.use('/api/cart', authenticateToken, cartRoutes);
+app.use('/api/wishlist', authenticateToken, wishlistRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  logger.warn('Route not found:', { path: req.path });
+  res.status(404).json({ error: 'Route not found' });
+});
 
 // Response logging
 app.use((req, res, next) => {
@@ -64,8 +96,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Force port to 8080
-const PORT = 8080;
+// Use port from environment variable or default to 8080
+const PORT = process.env.PORT || 8080;
 
 // Start server with error handling
 const server = app.listen(PORT, () => {

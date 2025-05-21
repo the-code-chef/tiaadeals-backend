@@ -10,7 +10,10 @@ const bcrypt = require('bcrypt');
  * body contains {firstName, lastName, email, password}
  */
 const signupHandler = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  // Accept both camelCase and snake_case
+  const firstName = req.body.firstName || req.body.first_name;
+  const lastName = req.body.lastName || req.body.last_name;
+  const { email, password } = req.body;
   try {
     const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (userCheck.rows.length > 0) {
