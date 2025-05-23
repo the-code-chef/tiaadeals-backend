@@ -1,4 +1,5 @@
-const pool = require('../utils/db');
+const pool = require("../utils/db");
+const logger = require("../utils/logger");
 
 /**
  * All the routes related to Category are present here.
@@ -11,10 +12,18 @@ const pool = require('../utils/db');
  * */
 const getAllCategoriesHandler = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM categories ORDER BY category_name');
+    logger.info("Fetching all categories");
+    const result = await pool.query(
+      "SELECT * FROM categories ORDER BY category_name"
+    );
+    logger.info(`Successfully fetched ${result.rows.length} categories`);
     return res.status(200).json({ categories: result.rows });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    logger.error("Error fetching categories:", error);
+    return res.status(500).json({
+      error: "Failed to fetch categories",
+      details: error.message,
+    });
   }
 };
 
@@ -25,22 +34,28 @@ const getAllCategoriesHandler = async (req, res) => {
 const getCategoryHandler = async (req, res) => {
   const { categoryId } = req.params;
   try {
-    const result = await pool.query(
-      'SELECT * FROM categories WHERE id = $1',
-      [categoryId]
-    );
-    
+    logger.info(`Fetching category with ID: ${categoryId}`);
+    const result = await pool.query("SELECT * FROM categories WHERE id = $1", [
+      categoryId,
+    ]);
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Category not found' });
+      logger.warn(`Category not found with ID: ${categoryId}`);
+      return res.status(404).json({ error: "Category not found" });
     }
-    
+
+    logger.info(`Successfully fetched category: ${categoryId}`);
     return res.status(200).json({ category: result.rows[0] });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    logger.error(`Error fetching category ${categoryId}:`, error);
+    return res.status(500).json({
+      error: "Failed to fetch category",
+      details: error.message,
+    });
   }
 };
 
 module.exports = {
   getAllCategoriesHandler,
-  getCategoryHandler
+  getCategoryHandler,
 };
