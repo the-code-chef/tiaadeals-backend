@@ -9,8 +9,9 @@ module.exports = {
     env: {
       NODE_ENV: 'production',
       PORT: 3000,
-      FRONTEND_URL: 'https://api.tiaadeals.com', // Update with your actual domain
+      FRONTEND_URL: 'https://tiaadeals.com', // Update with your actual domain
       DB_HOST: process.env.DB_HOST,
+      DB_PORT: 5432,
       DB_USER: process.env.DB_USER,
       DB_PASSWORD: process.env.DB_PASSWORD,
       DB_NAME: process.env.DB_NAME,
