@@ -9,6 +9,7 @@ package-lock.json
 .env.production
 .env.production.local
 .env.development.local
+# Note: .env.example is NOT ignored and should be committed
 
 # Logs
 logs

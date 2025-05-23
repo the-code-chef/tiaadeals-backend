@@ -25,31 +25,45 @@ npm install
 
 ### 3. Environment Setup
 
-Create a `.env` file in the root directory with the following variables:
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+2. Update the `.env` file with your actual configuration values:
 
 ```env
 # Server Configuration
-PORT=5000
+PORT=3000
+NODE_ENV=development
 
 # Database Configuration
-DB_USER=your_postgres_username
+DB_USER=your_actual_db_username
 DB_HOST=localhost
-DB_NAME=tiaadeals
-DB_PASSWORD=your_postgres_password
+DB_NAME=your_actual_db_name
+DB_PASSWORD=your_actual_db_password
 DB_PORT=5432
 
 # JWT Configuration
-JWT_SECRET=your_secure_jwt_secret_key
+JWT_SECRET=your_actual_jwt_secret
+
+# Frontend URL
+FRONTEND_URL=http://localhost:3000
 ```
+
+Note: Never commit the `.env` file to version control. The `.env.example` file serves as a template for required environment variables.
 
 ### 4. Database Setup
 
 1. Create a PostgreSQL database:
+
 ```bash
 createdb tiaadeals
 ```
 
 2. Verify database connection:
+
 ```bash
 node src/utils/testDb.js
 ```
@@ -57,20 +71,23 @@ node src/utils/testDb.js
 ### 5. Running the Application
 
 Development mode (with auto-reload):
+
 ```bash
 npm run dev
 ```
 
 Production mode:
+
 ```bash
 npm start
 ```
 
-The server will start on `http://localhost:5000` (or the port specified in your .env file)
+The server will start on `http://localhost:3000` (or the port specified in your .env file)
 
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - Register a new user
 - `POST /api/auth/login` - Login user
 - `GET /api/auth/verify` - Verify JWT token
@@ -90,6 +107,7 @@ src/
 ## Dependencies
 
 ### Production
+
 - express: Web framework
 - pg: PostgreSQL client
 - bcrypt: Password hashing
@@ -100,66 +118,55 @@ src/
 - dayjs: Date manipulation
 
 ### Development
+
 - nodemon: Auto-reload during development
 
 ## Deployment
 
 ### 1. Prepare for Production
 
-1. Set up environment variables on your production server
-2. Ensure all dependencies are installed:
+1. Create a production environment file:
+
 ```bash
-npm install --production
+cp .env.example .env.production
 ```
 
-### 2. Using PM2 (Recommended)
+2. Update `.env.production` with production values:
 
-1. Install PM2 globally:
-```bash
-npm install -g pm2
+```env
+NODE_ENV=production
+PORT=3000
+FRONTEND_URL=https://tiaadeals.com
+DB_HOST=your_production_db_host
+DB_USER=your_production_db_user
+DB_PASSWORD=your_production_db_password
+DB_NAME=your_production_db_name
+JWT_SECRET=your_production_jwt_secret
 ```
 
-2. Start the application:
-```bash
-pm2 start src/server.js --name tiaadeals-backend
-```
+### 2. Deploy to Production
 
-3. Other useful PM2 commands:
-```bash
-pm2 list                    # List all processes
-pm2 logs tiaadeals-backend  # View logs
-pm2 restart tiaadeals-backend # Restart application
-```
+1. Set up your production server (e.g., EC2)
+2. Clone the repository
+3. Install dependencies: `npm install`
+4. Set up the environment file
+5. Start the application: `npm start`
 
-### 3. Using Systemd (Alternative)
+## Environment Variables
 
-1. Create a systemd service file:
-```bash
-sudo nano /etc/systemd/system/tiaadeals-backend.service
-```
+The following environment variables are required:
 
-2. Add the following configuration:
-```ini
-[Unit]
-Description=TiaaDeals Backend Service
-After=network.target
-
-[Service]
-Type=simple
-User=your-user
-WorkingDirectory=/path/to/tiaadeals-backend
-ExecStart=/usr/bin/node src/server.js
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-
-3. Enable and start the service:
-```bash
-sudo systemctl enable tiaadeals-backend
-sudo systemctl start tiaadeals-backend
-```
+| Variable     | Description              | Example                |
+| ------------ | ------------------------ | ---------------------- |
+| PORT         | Server port              | 3000                   |
+| NODE_ENV     | Environment              | development/production |
+| DB_USER      | Database username        | tiaadeals_user         |
+| DB_HOST      | Database host            | localhost              |
+| DB_NAME      | Database name            | tiaadeals              |
+| DB_PASSWORD  | Database password        | your_password          |
+| DB_PORT      | Database port            | 5432                   |
+| JWT_SECRET   | Secret for JWT tokens    | your_secret_key        |
+| FRONTEND_URL | Frontend application URL | http://localhost:3000  |
 
 ## Security Considerations
 
@@ -173,11 +180,13 @@ sudo systemctl start tiaadeals-backend
 ## Monitoring
 
 1. Use PM2 monitoring:
+
 ```bash
 pm2 monit
 ```
 
 2. Set up logging:
+
 - Application logs are stored in the `logs` directory
 - Use PM2 logs for process monitoring
 
@@ -191,4 +200,4 @@ pm2 monit
 
 ## License
 
-ISC 
+ISC
