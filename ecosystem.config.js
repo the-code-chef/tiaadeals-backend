@@ -7,15 +7,10 @@ module.exports = {
     watch: false,
     max_memory_restart: '1G',
     env: {
-      NODE_ENV: 'production',
-      PORT: 3000,
-      FRONTEND_URL: 'https://tiaadeals.com', // Update with your actual domain
-      DB_HOST: process.env.DB_HOST,
-      DB_PORT: 5432,
-      DB_USER: process.env.DB_USER,
-      DB_PASSWORD: process.env.DB_PASSWORD,
-      DB_NAME: process.env.DB_NAME,
-      JWT_SECRET: process.env.JWT_SECRET
+      NODE_ENV: 'development'
+    },
+    env_production: {
+      NODE_ENV: 'production'
     }
   }]
-}; 
+};
