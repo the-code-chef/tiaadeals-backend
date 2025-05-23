@@ -12,9 +12,16 @@ const { authenticateToken } = require("./middleware/auth");
 
 // Load environment variables based on NODE_ENV
 if (process.env.NODE_ENV === "production") {
+  console.log("Loading .env.production file...");
   dotenv.config({ path: ".env.production" });
+  console.log(
+    "After loading .env.production, DB_HOST is:",
+    process.env.DB_HOST
+  );
 } else {
+  console.log("Loading .env file...");
   dotenv.config();
+  console.log("After loading .env, DB_HOST is:", process.env.DB_HOST);
 }
 
 // Debug: Log environment variables

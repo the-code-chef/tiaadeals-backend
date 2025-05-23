@@ -1,5 +1,11 @@
-require('dotenv').config();
-const { Pool } = require('pg');
+const { Pool } = require("pg");
+
+console.log("DB Connection Config:", {
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+});
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -12,11 +18,11 @@ const pool = new Pool({
 // Test the connection
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to the database:', err.stack);
+    console.error("Error connecting to the database:", err.stack);
   } else {
-    console.log('Successfully connected to the database');
+    console.log("Successfully connected to the database");
     release();
   }
 });
 
-module.exports = pool; 
+module.exports = pool;
