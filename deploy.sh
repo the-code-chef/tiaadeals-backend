@@ -1,4 +1,4 @@
-#!/bin/bash
+i#!/bin/bash
 
 # Update system packages
 sudo apt-get update
@@ -45,13 +45,13 @@ sudo nginx -t
 sudo systemctl restart nginx
 
 # Setup SSL with Let's Encrypt
-sudo certbot --nginx -d api.tiaadeals.com --non-interactive --agree-tos --email your-email@example.com
+sudo certbot --nginx -d api.tiaadeals.com --non-interactive --agree-tos --email tiaadeals@gmail.com
 
 # Create .env file
 cat > .env << EOF
 NODE_ENV=production
 PORT=3000
-FRONTEND_URL=https://api.tiaadeals.com
+FRONTEND_URL=https://tiaadeals.com
 DB_HOST=${DB_HOST}
 DB_USER=${DB_USER}
 DB_PASSWORD=${DB_PASSWORD}
