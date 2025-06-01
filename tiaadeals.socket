@@ -5,8 +5,8 @@ PartOf=tiaadeals.service
 [Socket]
 ListenStream=/var/run/tiaadeals.sock
 SocketMode=0660
-SocketUser=www-data
-SocketGroup=ubuntu
+SocketUser=ubuntu
+SocketGroup=www-data
 
 [Install]
 WantedBy=sockets.target 

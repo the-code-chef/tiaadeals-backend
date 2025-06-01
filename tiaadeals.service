@@ -6,7 +6,7 @@ After=network.target postgresql.service
 [Service]
 Type=simple
 User=ubuntu
-Group=ubuntu
+Group=www-data
 WorkingDirectory=/var/www/tiaadeals-backend
 Environment=NODE_ENV=production
 Environment=PM2_HOME=/home/ubuntu/.pm2
