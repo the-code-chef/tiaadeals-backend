@@ -12,8 +12,8 @@ Environment=NODE_ENV=production
 Environment=PM2_HOME=/home/ubuntu/.pm2
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
-# Clean up socket file before starting
-ExecStartPre=/bin/rm -f /var/run/tiaadeals.sock
+# Clean up socket file before starting (ignore errors)
+ExecStartPre=/bin/bash -c 'rm -f /var/run/tiaadeals.sock || true'
 
 # Start the application
 ExecStart=/usr/bin/pm2 start ecosystem.config.js --no-daemon
