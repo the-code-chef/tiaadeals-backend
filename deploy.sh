@@ -159,7 +159,7 @@ limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
 
 server {
     listen 80;
-    server_name api.tiaadeals.com www.api.tiaadeals.com;
+    server_name api.tiaadeals.com;
     
     # Allow Let's Encrypt to verify domain ownership
     location /.well-known/acme-challenge/ {
@@ -225,7 +225,7 @@ sudo systemctl restart tiaadeals
 
 # Get SSL certificate
 echo "Getting SSL certificate..."
-sudo certbot --nginx -d api.tiaadeals.com -d www.api.tiaadeals.com --non-interactive --agree-tos --email deepanshusinha94@gmail.com
+sudo certbot --nginx -d api.tiaadeals.com --non-interactive --agree-tos --email deepanshusinha94@gmail.com
 
 # Update Nginx configuration with SSL and CORS
 echo "Updating Nginx configuration with SSL and CORS..."
@@ -241,7 +241,7 @@ limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
 
 server {
     listen 80;
-    server_name api.tiaadeals.com www.api.tiaadeals.com;
+    server_name api.tiaadeals.com;
     
     # Allow Let's Encrypt to verify domain ownership
     location /.well-known/acme-challenge/ {
@@ -256,7 +256,7 @@ server {
 
 server {
     listen 443 ssl http2;
-    server_name api.tiaadeals.com www.api.tiaadeals.com;
+    server_name api.tiaadeals.com;
 
     # SSL configuration
     ssl_certificate /etc/letsencrypt/live/api.tiaadeals.com/fullchain.pem;
