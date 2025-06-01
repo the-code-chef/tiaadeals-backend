@@ -45,13 +45,14 @@ if (!fs.existsSync("logs")) {
 
 // CORS configuration
 const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5173",
+  // Development
   "http://localhost:8080",
-  "http://127.0.0.1:3000",
-  "http://127.0.0.1:5173",
   "http://127.0.0.1:8080",
+  // Production domains
   "https://tiaadeals.com",
+  "https://www.tiaadeals.com",
+  "http://tiaadeals.com",
+  "http://www.tiaadeals.com",
 ];
 
 const corsOptions = {
@@ -59,10 +60,19 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    // Check if the origin matches any of our allowed domains
+    const isAllowed = allowedOrigins.some((allowedOrigin) => {
+      // For production domains, also allow subdomains
+      if (allowedOrigin.includes("tiaadeals.com")) {
+        return origin.endsWith("tiaadeals.com");
+      }
+      return allowedOrigin === origin;
+    });
+
+    if (isAllowed) {
       callback(null, true);
     } else {
-      console.log("CORS blocked request from origin:", origin);
+      logger.warn("CORS blocked request from origin:", origin);
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -70,6 +80,7 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   exposedHeaders: ["Content-Range", "X-Content-Range"],
+  maxAge: 86400, // 24 hours
 };
 
 // Basic middleware
@@ -84,6 +95,7 @@ app.use((req, res, next) => {
     path: req.path,
     headers: req.headers,
     body: req.body,
+    origin: req.headers.origin,
   });
   next();
 });
@@ -119,33 +131,47 @@ app.use((req, res, next) => {
   next();
 });
 
-// Error handling
-app.use((err, req, res, next) => {
-  logger.error("Server error:", {
-    error: err.message,
-    stack: err.stack,
-  });
-  res.status(500).json({ error: "Something went wrong!" });
-});
-
-// Use port from environment variable or default to 8080
+// Use port from environment variable or default to 3000
 const PORT = process.env.PORT || 3000;
+
+// Create Unix socket directory if it doesn't exist
+const socketPath = "/var/run/tiaadeals.sock";
+if (fs.existsSync(socketPath)) {
+  fs.unlinkSync(socketPath);
+}
 
 // Start server with error handling
 const server = app
-  .listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    logger.info(`Server is running on port ${PORT}`);
+  .listen(socketPath, () => {
+    console.log(`Server is running on Unix socket: ${socketPath}`);
+    logger.info(`Server is running on Unix socket: ${socketPath}`);
+
+    // Set proper permissions for the socket
+    fs.chmodSync(socketPath, "660");
   })
   .on("error", (err) => {
     console.error("Server error:", err);
-    if (err.code === "EADDRINUSE") {
-      logger.error(
-        `Port ${PORT} is already in use. Please try a different port.`
-      );
-      process.exit(1);
-    } else {
-      logger.error("Server error:", err);
-      process.exit(1);
-    }
+    logger.error("Server error:", err);
+    process.exit(1);
   });
+
+// Set timeout to 5 minutes
+server.timeout = 300000;
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (err) => {
+  logger.error("Uncaught Exception:", err);
+  // Give time for logging before exit
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (reason, promise) => {
+  logger.error("Unhandled Rejection at:", promise, "reason:", reason);
+  // Give time for logging before exit
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
