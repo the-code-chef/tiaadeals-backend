@@ -16,11 +16,11 @@ Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/u
 ExecStartPre=/bin/rm -f /var/run/tiaadeals.sock
 
 # Start the application
-ExecStart=/usr/local/bin/pm2 start ecosystem.config.js --no-daemon
+ExecStart=/usr/bin/pm2 start ecosystem.config.js --no-daemon
 
 # Reload and stop commands
-ExecReload=/usr/local/bin/pm2 reload ecosystem.config.js
-ExecStop=/usr/local/bin/pm2 stop ecosystem.config.js
+ExecReload=/usr/bin/pm2 reload ecosystem.config.js
+ExecStop=/usr/bin/pm2 stop ecosystem.config.js
 
 # Restart policy
 Restart=on-failure
