@@ -51,4 +51,4 @@ echo "Checking service status..."
 sudo systemctl status tiaadeals.socket
 sudo systemctl status tiaadeals
 
-echo "Socket configuration completed!" 
+echo "Socket configuration completed!"
