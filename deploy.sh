@@ -145,8 +145,8 @@ Environment=NODE_ENV=production
 WantedBy=multi-user.target
 EOF
 
-# Create Nginx configuration
-echo "Creating Nginx configuration..."
+# Create initial Nginx configuration (HTTP only)
+echo "Creating initial Nginx configuration..."
 sudo tee /etc/nginx/sites-available/tiaadeals << 'EOF'
 # Security headers
 map $http_upgrade $connection_upgrade {
@@ -166,7 +166,89 @@ server {
         root /var/www/html;
     }
 
-    # Redirect all other HTTP traffic to HTTPS
+    # API endpoints
+    location /api/ {
+        # Rate limiting
+        limit_req zone=api_limit burst=20 nodelay;
+        
+        proxy_pass http://unix:/var/run/tiaadeals.sock;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        
+        # Buffer size
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+    }
+
+    # Health check endpoint
+    location /health {
+        proxy_pass http://unix:/var/run/tiaadeals.sock;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Deny access to hidden files
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+}
+EOF
+
+# Enable and start services
+echo "Enabling and starting services..."
+sudo ln -sf /etc/nginx/sites-available/tiaadeals /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo systemctl daemon-reload
+sudo systemctl enable tiaadeals.socket
+sudo systemctl enable tiaadeals
+sudo systemctl enable nginx
+
+# Start services
+echo "Starting services..."
+sudo systemctl restart nginx
+sudo systemctl restart tiaadeals.socket
+sudo systemctl restart tiaadeals
+
+# Get SSL certificate
+echo "Getting SSL certificate..."
+sudo certbot --nginx -d api.tiaadeals.com -d www.api.tiaadeals.com --non-interactive --agree-tos --email deepanshusinha94@gmail.com
+
+# Update Nginx configuration with SSL and CORS
+echo "Updating Nginx configuration with SSL and CORS..."
+sudo tee /etc/nginx/sites-available/tiaadeals << 'EOF'
+# Security headers
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
+# Rate limiting
+limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
+
+server {
+    listen 80;
+    server_name api.tiaadeals.com www.api.tiaadeals.com;
+    
+    # Allow Let's Encrypt to verify domain ownership
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    # Redirect all HTTP traffic to HTTPS
     location / {
         return 301 https://$server_name$request_uri;
     }
@@ -260,25 +342,6 @@ server {
     }
 }
 EOF
-
-# Enable and start services
-echo "Enabling and starting services..."
-sudo ln -sf /etc/nginx/sites-available/tiaadeals /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo systemctl daemon-reload
-sudo systemctl enable tiaadeals.socket
-sudo systemctl enable tiaadeals
-sudo systemctl enable nginx
-
-# Start services
-echo "Starting services..."
-sudo systemctl restart nginx
-sudo systemctl restart tiaadeals.socket
-sudo systemctl restart tiaadeals
-
-# Get SSL certificate
-echo "Getting SSL certificate..."
-sudo certbot --nginx -d api.tiaadeals.com -d www.api.tiaadeals.com --non-interactive --agree-tos --email deepanshusinha94@gmail.com
 
 # Final restart of services
 echo "Performing final restart of services..."
