@@ -2,18 +2,17 @@ module.exports = {
   apps: [
     {
       name: "tiaadeals-backend",
-      script: "src/server.js",
+      script: "/var/www/tiaadeals-backend/src/server.js",
       instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: "300M",
       env: {
         NODE_ENV: "production",
-        PORT: 3000,
       },
-      error_file: "logs/err.log",
-      out_file: "logs/out.log",
-      log_file: "logs/combined.log",
+      error_file: "/var/www/tiaadeals-backend/logs/err.log",
+      out_file: "/var/www/tiaadeals-backend/logs/out.log",
+      log_file: "/var/www/tiaadeals-backend/logs/combined.log",
       time: true,
       exec_mode: "fork",
       exec_interpreter: "node",

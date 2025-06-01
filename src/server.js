@@ -140,6 +140,12 @@ if (fs.existsSync(socketPath)) {
   fs.unlinkSync(socketPath);
 }
 
+// Create logs directory if it doesn't exist
+const logsDir = "/var/www/tiaadeals-backend/logs";
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
+
 // Start server with error handling
 const server = app
   .listen(socketPath, () => {
