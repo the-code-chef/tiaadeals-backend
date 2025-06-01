@@ -105,11 +105,29 @@ module.exports = {
 };
 EOF
 
+# Create systemd socket file
+echo "Creating systemd socket..."
+sudo tee /etc/systemd/system/tiaadeals.socket << 'EOF'
+[Unit]
+Description=TiaaDeals Unix Socket
+PartOf=tiaadeals.service
+
+[Socket]
+ListenStream=/var/run/tiaadeals.sock
+SocketMode=0660
+SocketUser=www-data
+SocketGroup=ubuntu
+
+[Install]
+WantedBy=sockets.target
+EOF
+
 # Create systemd service file
 echo "Creating systemd service..."
 sudo tee /etc/systemd/system/tiaadeals.service << 'EOF'
 [Unit]
 Description=TiaaDeals Backend Service
+Requires=tiaadeals.socket
 After=network.target
 
 [Service]
@@ -125,23 +143,6 @@ Environment=NODE_ENV=production
 
 [Install]
 WantedBy=multi-user.target
-EOF
-
-# Create systemd socket file
-echo "Creating systemd socket..."
-sudo tee /etc/systemd/system/tiaadeals.socket << 'EOF'
-[Unit]
-Description=TiaaDeals Unix Socket
-After=network.target
-
-[Socket]
-SocketPath=/var/run/tiaadeals.sock
-SocketMode=0660
-SocketUser=www-data
-SocketGroup=ubuntu
-
-[Install]
-WantedBy=sockets.target
 EOF
 
 # Create Nginx configuration
@@ -178,6 +179,7 @@ EOF
 echo "Enabling and starting services..."
 sudo ln -sf /etc/nginx/sites-available/tiaadeals /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
+sudo systemctl daemon-reload
 sudo systemctl enable tiaadeals.socket
 sudo systemctl enable tiaadeals
 sudo systemctl enable nginx
