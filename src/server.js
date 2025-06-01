@@ -2,6 +2,54 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
+const fs = require("fs");
+
+// Load environment variables
+const envFile =
+  process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+const envPath = path.resolve(process.cwd(), envFile);
+
+console.log("Loading environment from:", envPath);
+console.log("Current working directory:", process.cwd());
+
+if (fs.existsSync(envPath)) {
+  console.log("Environment file exists, loading...");
+  dotenv.config({ path: envPath });
+} else {
+  console.error("Environment file not found:", envPath);
+  process.exit(1);
+}
+
+// Verify required environment variables
+const requiredEnvVars = [
+  "DB_HOST",
+  "DB_PORT",
+  "DB_NAME",
+  "DB_USER",
+  "DB_PASSWORD",
+  "JWT_SECRET",
+];
+
+const missingEnvVars = requiredEnvVars.filter(
+  (varName) => !process.env[varName]
+);
+if (missingEnvVars.length > 0) {
+  console.error("Missing required environment variables:", missingEnvVars);
+  process.exit(1);
+}
+
+// Debug: Log environment variables (excluding sensitive data)
+console.log("Environment variables loaded:", {
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  DB_HOST: process.env.DB_HOST,
+  DB_PORT: process.env.DB_PORT,
+  DB_NAME: process.env.DB_NAME,
+  DB_USER: process.env.DB_USER,
+  LOG_LEVEL: process.env.LOG_LEVEL,
+});
+
 const logger = require("./utils/logger");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
@@ -10,45 +58,18 @@ const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const { authenticateToken } = require("./middleware/auth");
 
-// Load environment variables based on NODE_ENV
-if (process.env.NODE_ENV === "production") {
-  console.log("Loading .env.production file...");
-  dotenv.config({ path: ".env.production" });
-  console.log(
-    "After loading .env.production, DB_HOST is:",
-    process.env.DB_HOST
-  );
-} else {
-  console.log("Loading .env file...");
-  dotenv.config();
-  console.log("After loading .env, DB_HOST is:", process.env.DB_HOST);
-}
-
-// Debug: Log environment variables
-console.log("Environment variables:", {
-  PORT: process.env.PORT,
-  NODE_ENV: process.env.NODE_ENV,
-  DB_HOST: process.env.DB_HOST,
-  DB_PORT: process.env.DB_PORT,
-  DB_NAME: process.env.DB_NAME,
-  DB_USER: process.env.DB_USER,
-});
-
 const app = express();
 
 // Create logs directory if it doesn't exist
-const fs = require("fs");
-const path = require("path");
-if (!fs.existsSync("logs")) {
-  fs.mkdirSync("logs");
+const logsDir = process.env.LOG_DIR || path.join(process.cwd(), "logs");
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
 }
 
 // CORS configuration
 const allowedOrigins = [
-  // Development
   "http://localhost:8080",
   "http://127.0.0.1:8080",
-  // Production domains
   "https://tiaadeals.com",
   "https://www.tiaadeals.com",
   "http://tiaadeals.com",
@@ -57,12 +78,8 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-
-    // Check if the origin matches any of our allowed domains
     const isAllowed = allowedOrigins.some((allowedOrigin) => {
-      // For production domains, also allow subdomains
       if (allowedOrigin.includes("tiaadeals.com")) {
         return origin.endsWith("tiaadeals.com");
       }
@@ -80,7 +97,7 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   exposedHeaders: ["Content-Range", "X-Content-Range"],
-  maxAge: 86400, // 24 hours
+  maxAge: 86400,
 };
 
 // Basic middleware
@@ -131,43 +148,54 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use port from environment variable or default to 3000
-const PORT = process.env.PORT || 3000;
+// Determine if we're in production
+const isProduction = process.env.NODE_ENV === "production";
 
-// Create Unix socket directory if it doesn't exist
-const socketPath = "/var/run/tiaadeals.sock";
-if (fs.existsSync(socketPath)) {
-  fs.unlinkSync(socketPath);
+// Start server based on environment
+if (isProduction) {
+  // Production: Use Unix socket
+  const socketPath = "/var/run/tiaadeals.sock";
+  if (fs.existsSync(socketPath)) {
+    fs.unlinkSync(socketPath);
+  }
+
+  const server = app
+    .listen(socketPath, () => {
+      console.log(`Server is running on Unix socket: ${socketPath}`);
+      logger.info(`Server is running on Unix socket: ${socketPath}`);
+
+      // Set proper permissions for the socket
+      fs.chmodSync(socketPath, "660");
+    })
+    .on("error", (err) => {
+      console.error("Server error:", err);
+      logger.error("Server error:", err);
+      process.exit(1);
+    });
+
+  // Set timeout to 5 minutes
+  server.timeout = 300000;
+} else {
+  // Development: Use port
+  const PORT = process.env.PORT || 3000;
+  const server = app
+    .listen(PORT, () => {
+      console.log(`Server is running on port: ${PORT}`);
+      logger.info(`Server is running on port: ${PORT}`);
+    })
+    .on("error", (err) => {
+      console.error("Server error:", err);
+      logger.error("Server error:", err);
+      process.exit(1);
+    });
+
+  // Set timeout to 5 minutes
+  server.timeout = 300000;
 }
-
-// Create logs directory if it doesn't exist
-const logsDir = "/var/www/tiaadeals-backend/logs";
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
-}
-
-// Start server with error handling
-const server = app
-  .listen(socketPath, () => {
-    console.log(`Server is running on Unix socket: ${socketPath}`);
-    logger.info(`Server is running on Unix socket: ${socketPath}`);
-
-    // Set proper permissions for the socket
-    fs.chmodSync(socketPath, "660");
-  })
-  .on("error", (err) => {
-    console.error("Server error:", err);
-    logger.error("Server error:", err);
-    process.exit(1);
-  });
-
-// Set timeout to 5 minutes
-server.timeout = 300000;
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
   logger.error("Uncaught Exception:", err);
-  // Give time for logging before exit
   setTimeout(() => {
     process.exit(1);
   }, 1000);
@@ -176,7 +204,6 @@ process.on("uncaughtException", (err) => {
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (reason, promise) => {
   logger.error("Unhandled Rejection at:", promise, "reason:", reason);
-  // Give time for logging before exit
   setTimeout(() => {
     process.exit(1);
   }, 1000);
