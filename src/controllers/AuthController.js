@@ -2,7 +2,7 @@ const { v4: uuid } = require("uuid");
 const { formatDate } = require("../utils/authUtils");
 const pool = require("../utils/db");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const logger = require("../utils/logger");
 
 /**
