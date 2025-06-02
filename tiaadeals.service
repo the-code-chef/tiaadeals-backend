@@ -11,10 +11,10 @@ Environment=NODE_ENV=production
 Environment=PM2_HOME=/home/ubuntu/.pm2
 
 # Create socket directory with correct permissions
-ExecStartPre=/bin/mkdir -p /var/run/tiaadeals
-ExecStartPre=/bin/chown ubuntu:www-data /var/run/tiaadeals
-ExecStartPre=/bin/chmod 775 /var/run/tiaadeals
-ExecStartPre=/bin/rm -f /var/run/tiaadeals/tiaadeals.sock
+ExecStartPre=/bin/mkdir -p /var/run
+ExecStartPre=/bin/chown root:www-data /var/run
+ExecStartPre=/bin/chmod 775 /var/run
+ExecStartPre=/bin/rm -f /var/run/tiaadeals.sock
 
 # Start the application
 ExecStart=/usr/bin/pm2 start ecosystem.config.js --no-daemon

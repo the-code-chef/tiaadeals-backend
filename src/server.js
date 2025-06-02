@@ -154,7 +154,7 @@ const isProduction = process.env.NODE_ENV === "production";
 // Start server based on environment
 if (isProduction) {
   // Production: Use Unix socket
-  const SOCKET_PATH = "/var/run/tiaadeals/tiaadeals.sock";
+  const SOCKET_PATH = "/var/run/tiaadeals.sock";
   const server = app
     .listen(SOCKET_PATH, () => {
       console.log(`Server is running on Unix socket: ${SOCKET_PATH}`);
