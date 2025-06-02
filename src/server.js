@@ -153,12 +153,12 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // Start server based on environment
 if (isProduction) {
-  // Production: Use Unix socket
-  const SOCKET_PATH = "/var/run/tiaadeals.sock";
+  // Production: Use TCP port
+  const PORT = process.env.PORT || 3000;
   const server = app
-    .listen(SOCKET_PATH, () => {
-      console.log(`Server is running on Unix socket: ${SOCKET_PATH}`);
-      logger.info(`Server is running on Unix socket: ${SOCKET_PATH}`);
+    .listen(PORT, () => {
+      console.log(`Server is running on port: ${PORT}`);
+      logger.info(`Server is running on port: ${PORT}`);
     })
     .on("error", (err) => {
       console.error("Server error:", err);
