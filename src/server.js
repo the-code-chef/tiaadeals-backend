@@ -154,31 +154,11 @@ const isProduction = process.env.NODE_ENV === "production";
 // Start server based on environment
 if (isProduction) {
   // Production: Use Unix socket
-  const socketPath = "/var/run/tiaadeals.sock";
-
-  // Try to remove existing socket file with sudo
-  try {
-    if (fs.existsSync(socketPath)) {
-      require("child_process").execSync(`sudo rm -f ${socketPath}`);
-    }
-  } catch (error) {
-    logger.warn("Could not remove existing socket file:", error);
-  }
-
+  const SOCKET_PATH = "/var/run/tiaadeals/tiaadeals.sock";
   const server = app
-    .listen(socketPath, () => {
-      console.log(`Server is running on Unix socket: ${socketPath}`);
-      logger.info(`Server is running on Unix socket: ${socketPath}`);
-
-      // Set proper permissions for the socket
-      try {
-        require("child_process").execSync(
-          `sudo chown www-data:ubuntu ${socketPath}`
-        );
-        require("child_process").execSync(`sudo chmod 660 ${socketPath}`);
-      } catch (error) {
-        logger.error("Failed to set socket permissions:", error);
-      }
+    .listen(SOCKET_PATH, () => {
+      console.log(`Server is running on Unix socket: ${SOCKET_PATH}`);
+      logger.info(`Server is running on Unix socket: ${SOCKET_PATH}`);
     })
     .on("error", (err) => {
       console.error("Server error:", err);
