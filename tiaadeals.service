@@ -1,5 +1,6 @@
 [Unit]
 Description=TiaaDeals Backend Service
+Requires=tiaadeals.socket
 After=network.target postgresql.service
 
 [Service]
