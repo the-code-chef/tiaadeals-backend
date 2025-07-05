@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
@@ -66,42 +65,7 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// CORS configuration
-const allowedOrigins = [
-  "http://localhost:8080",
-  "http://127.0.0.1:8080",
-  "https://tiaadeals.com",
-  "https://www.tiaadeals.com",
-  "http://tiaadeals.com",
-  "http://www.tiaadeals.com",
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    const isAllowed = allowedOrigins.some((allowedOrigin) => {
-      if (allowedOrigin.includes("tiaadeals.com")) {
-        return origin.endsWith("tiaadeals.com");
-      }
-      return allowedOrigin === origin;
-    });
-
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      logger.warn("CORS blocked request from origin:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["Content-Range", "X-Content-Range"],
-  maxAge: 86400,
-};
-
 // Basic middleware
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("combined", { stream: logger.stream }));
 
