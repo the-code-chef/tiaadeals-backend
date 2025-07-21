@@ -1,0 +1,66 @@
+[2025-07-19 16:49:29] ============================================================
+[2025-07-19 16:49:29] Starting TiaaDeals Remaining Product Upload
+[2025-07-19 16:49:29] ============================================================
+[2025-07-19 16:49:29] Loaded 27 products from products_data_remaining.json
+[2025-07-19 16:49:29] Uploading 1/27: dell vostro
+[2025-07-19 16:49:29] ✅ Success: dell vostro
+[2025-07-19 16:49:30] Uploading 2/27: dell inspiron
+[2025-07-19 16:49:30] ✅ Success: dell inspiron
+[2025-07-19 16:49:30] Uploading 3/27: dell latitude
+[2025-07-19 16:49:30] ✅ Success: dell latitude
+[2025-07-19 16:49:31] Uploading 4/27: oneplus 50Y1S pro
+[2025-07-19 16:49:31] ✅ Success: oneplus 50Y1S pro
+[2025-07-19 16:49:31] Uploading 5/27: oneplus 40Y1S
+[2025-07-19 16:49:32] ✅ Success: oneplus 40Y1S
+[2025-07-19 16:49:32] Uploading 6/27: oneplus 55U1S
+[2025-07-19 16:49:32] ✅ Success: oneplus 55U1S
+[2025-07-19 16:49:33] Uploading 7/27: oneplus 55Q1IN-1
+[2025-07-19 16:49:33] ✅ Success: oneplus 55Q1IN-1
+[2025-07-19 16:49:33] Uploading 8/27: oneplus buds z2
+[2025-07-19 16:49:33] ✅ Success: oneplus buds z2
+[2025-07-19 16:49:34] Uploading 9/27: oneplus nord buds
+[2025-07-19 16:49:34] ✅ Success: oneplus nord buds
+[2025-07-19 16:49:34] Uploading 10/27: oneplus buds pro
+[2025-07-19 16:49:34] ✅ Success: oneplus buds pro
+[2025-07-19 16:49:35] Uploading 11/27: oneplus bullets z2
+[2025-07-19 16:49:35] ✅ Success: oneplus bullets z2
+[2025-07-19 16:49:35] Uploading 12/27: oneplus smart band
+[2025-07-19 16:49:35] ✅ Success: oneplus smart band
+[2025-07-19 16:49:36] Uploading 13/27: oneplus nord watch
+[2025-07-19 16:49:36] ✅ Success: oneplus nord watch
+[2025-07-19 16:49:36] Uploading 14/27: oneplus nord CE 3 lite
+[2025-07-19 16:49:36] ✅ Success: oneplus nord CE 3 lite
+[2025-07-19 16:49:37] Uploading 15/27: oneplus 11R
+[2025-07-19 16:49:37] ✅ Success: oneplus 11R
+[2025-07-19 16:49:37] Uploading 16/27: oneplus nord 2T
+[2025-07-19 16:49:37] ✅ Success: oneplus nord 2T
+[2025-07-19 16:49:38] Uploading 17/27: oneplus 10R
+[2025-07-19 16:49:38] ✅ Success: oneplus 10R
+[2025-07-19 16:49:38] Uploading 18/27: oneplus 11
+[2025-07-19 16:49:38] ✅ Success: oneplus 11
+[2025-07-19 16:49:39] Uploading 19/27: vivoBook 16X
+[2025-07-19 16:49:39] ✅ Success: vivoBook 16X
+[2025-07-19 16:49:39] Uploading 20/27: vivoBook ultra k14
+[2025-07-19 16:49:39] ✅ Success: vivoBook ultra k14
+[2025-07-19 16:49:40] Uploading 21/27: vivoBook 14
+[2025-07-19 16:49:40] ✅ Success: vivoBook 14
+[2025-07-19 16:49:40] Uploading 22/27: vivoBook 15
+[2025-07-19 16:49:40] ✅ Success: vivoBook 15
+[2025-07-19 16:49:41] Uploading 23/27: vivo V23
+[2025-07-19 16:49:41] ✅ Success: vivo V23
+[2025-07-19 16:49:41] Uploading 24/27: vivo Y15C
+[2025-07-19 16:49:42] ✅ Success: vivo Y15C
+[2025-07-19 16:49:42] Uploading 25/27: vivo t1x
+[2025-07-19 16:49:42] ✅ Success: vivo t1x
+[2025-07-19 16:49:43] Uploading 26/27: vivo Y22
+[2025-07-19 16:49:43] ✅ Success: vivo Y22
+[2025-07-19 16:49:43] Uploading 27/27: vivo Y16
+[2025-07-19 16:49:43] ✅ Success: vivo Y16
+[2025-07-19 16:49:44] ============================================================
+[2025-07-19 16:49:44] Upload Summary:
+[2025-07-19 16:49:44] Total products: 27
+[2025-07-19 16:49:44] Successful: 27
+[2025-07-19 16:49:44] Failed: 0
+[2025-07-19 16:49:44] Success rate: 100.0%
+[2025-07-19 16:49:44] ============================================================
+[2025-07-19 16:49:44] 🎉 All products uploaded successfully!

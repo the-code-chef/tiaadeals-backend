@@ -1,0 +1,48 @@
+[2025-07-19 16:45:29] ============================================================
+[2025-07-19 16:45:29] Starting TiaaDeals Product Upload
+[2025-07-19 16:45:29] ============================================================
+[2025-07-19 16:45:29] Loaded 18 products from products_data.json
+[2025-07-19 16:45:29] Uploading 1/18: mi horizon
+[2025-07-19 16:45:29] ✅ Success: mi horizon
+[2025-07-19 16:45:29] Uploading 2/18: mi sonicBass
+[2025-07-19 16:45:29] ✅ Success: mi sonicBass
+[2025-07-19 16:45:30] Uploading 3/18: mi buds 3 lite
+[2025-07-19 16:45:30] ✅ Success: mi buds 3 lite
+[2025-07-19 16:45:30] Uploading 4/18: mi smartband pro
+[2025-07-19 16:45:30] ✅ Success: mi smartband pro
+[2025-07-19 16:45:31] Uploading 5/18: mi go phone
+[2025-07-19 16:45:31] ✅ Success: mi go phone
+[2025-07-19 16:45:31] Uploading 6/18: mi 10 prime
+[2025-07-19 16:45:32] ✅ Success: mi 10 prime
+[2025-07-19 16:45:32] Uploading 7/18: mi note 12
+[2025-07-19 16:45:32] ✅ Success: mi note 12
+[2025-07-19 16:45:33] Uploading 8/18: mi 9 activ
+[2025-07-19 16:45:33] ✅ Success: mi 9 activ
+[2025-07-19 16:45:33] Uploading 9/18: apple air 2020
+[2025-07-19 16:45:33] ✅ Success: apple air 2020
+[2025-07-19 16:45:34] Uploading 10/18: apple air 2022
+[2025-07-19 16:45:34] ✅ Success: apple air 2022
+[2025-07-19 16:45:34] Uploading 11/18: apple air 2023
+[2025-07-19 16:45:34] ✅ Success: apple air 2023
+[2025-07-19 16:45:35] Uploading 12/18: apple prod display xdr
+[2025-07-19 16:45:35] ✅ Success: apple prod display xdr
+[2025-07-19 16:45:35] Uploading 13/18: apple airPods pro
+[2025-07-19 16:45:35] ✅ Success: apple airPods pro
+[2025-07-19 16:45:36] Uploading 14/18: apple airPods max
+[2025-07-19 16:45:36] ✅ Success: apple airPods max
+[2025-07-19 16:45:36] Uploading 15/18: apple watch ultra
+[2025-07-19 16:45:36] ✅ Success: apple watch ultra
+[2025-07-19 16:45:37] Uploading 16/18: apple watch SE
+[2025-07-19 16:45:37] ✅ Success: apple watch SE
+[2025-07-19 16:45:37] Uploading 17/18: iPhone 12
+[2025-07-19 16:45:37] ✅ Success: iPhone 12
+[2025-07-19 16:45:38] Uploading 18/18: iPhone 14 plus
+[2025-07-19 16:45:38] ✅ Success: iPhone 14 plus
+[2025-07-19 16:45:38] ============================================================
+[2025-07-19 16:45:38] Upload Summary:
+[2025-07-19 16:45:38] Total products: 18
+[2025-07-19 16:45:38] Successful: 18
+[2025-07-19 16:45:38] Failed: 0
+[2025-07-19 16:45:38] Success rate: 100.0%
+[2025-07-19 16:45:38] ============================================================
+[2025-07-19 16:45:38] 🎉 All products uploaded successfully!
